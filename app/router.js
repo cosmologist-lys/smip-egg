@@ -2,8 +2,15 @@
 
 /**
  * @param {Egg.Application} app - egg application
+ * 路由总分发
+ * router.verb('pathname','pathmatch',controller.action)
  */
 module.exports = app => {
   const { router, controller } = app;
-  router.get('/', controller.home.index);
+
+
+  router.get('/', controller.home.getLogin);
+  router.post('/', controller.home.postLogin);
+
+  router.get('router/baseRouter','/test/*',controller.home.test);
 };
