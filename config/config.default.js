@@ -3,11 +3,11 @@
 module.exports = appInfo => {
   const config = exports = {};
 
-  // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_cosmologist_kepler_lys_1989';
 
-  // add your config here
+  // add your params here
   config.middleware = [];
+
 	config.view = {
 		defaultViewEngine: 'nunjucks',
 		mapping: {
@@ -20,6 +20,14 @@ module.exports = appInfo => {
 		httpOnly: true,
 		encrypt: true,
 	};
-
+	/*
+	配置view的目录
+	const path = require('path');
+	params.view = {
+		root: [
+			path.join(appInfo.baseDir, 'app/view'),
+			path.join(appInfo.baseDir, '/public/base'),
+		].join(',')
+	};*/
   return config;
 };
