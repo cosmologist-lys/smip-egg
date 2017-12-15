@@ -2,35 +2,37 @@
 
 const Controller = require('egg').Controller;
 const api = require('../params/Api');
-const md5 = require('crypto').createHash('md5');
-const apiInfo = require('../utils/apiInfo');
-
+//const md5 = require('crypto').createHash('md5');
 
 class HomeController extends Controller {
 
 
   async getLogin() {
-    return this.ctx.render('base/login.html');
+  	let errmsg = '';
+  	console.log(this.ctx.session.auth)
+  	if (null != this.ctx.session.auth
+	    && this.ctx.session.auth === false
+            && this.ctx.session.sysuser == null)
+  	    errmsg = 'ACCOUNT WRONG'
+    return this.ctx.render('base/login.html',{errmsg:errmsg});
   }
 
   async postLogin() {
-  	const username = this.ctx.request.body.username,
-	    password = this.ctx.request.body.password;
-  	const result = await this.ctx.curl(api.sysuserUri+'login', {
-		  method: 'GET',
-		  contentType: 'json',
-		  headers: {
-			  username: username,
-			  psw:md5.update(password).digest('hex')
-		  },
-		  dataType: 'json',
-	  });
-  	console.log(result)
-  	const json = apiInfo.getJson(result);
-  	console.log(json.obj);
-  	console.log(json.statusCode);
-  	console.log(json.statusString);
-
+  	const ctx = this.ctx;
+  	const json = await ctx.service.sys.secuser.login( {
+	    alg: '1bc29b36f623ba82aaf6724fd3b16718',
+	    username: ctx.request.body.username,
+	    psw:require('crypto').createHash('md5')
+		    .update(ctx.request.body.password)
+		    .digest('hex')
+    },api.sysuserUri+'/login');
+  	const user = json.user;
+  	ctx.session.auth = json.valid;
+  	ctx.session.sysuser = user;
+  	if (json.valid)
+  	    return ctx.render('base/home.html',{user:user});
+  	else
+  		return ctx.redirect('/');
   }
 
   async test(){
