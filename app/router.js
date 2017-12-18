@@ -12,5 +12,5 @@ module.exports = app => {
   router.get('/', controller.home.getLogin);
   router.post('/', controller.home.postLogin);
 
-  router.get('router/baseRouter','/test/*',controller.home.test);
+  router.get('/home',controller.home.home);
 };

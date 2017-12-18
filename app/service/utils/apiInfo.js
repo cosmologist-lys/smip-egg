@@ -14,10 +14,6 @@ const apiInfo = {
 				obj: result.data.targets,
 				size: result.data.size
 			}
-			/*if (!json || json.statusCode != 200)
-				return {user:json.obj,valid:false};
-			if (json.obj && json.obj.toString().length>0)
-				return {user:json.obj,valid:true};*/
 			if (json.statusString === 'OK' && json.obj.toString().length>0)
 				return {user:json.obj,valid:true}
 			else

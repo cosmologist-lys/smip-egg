@@ -16,8 +16,19 @@ class secUserService extends Service {
 		return json;
 	}
 
-	async test() {
-		return 'haha';
+	async valid(ctx){
+		let cb = '';
+		if (ctx.session.succLogin == false){
+			cb = 'Account Wrong!!!'
+		}
+		if (ctx.session.succLogin == undefined
+				&& ctx.session.sysuser != null){
+			cb = ''
+		}
+		if (ctx.session.auth == undefined
+				&& ctx.session.sysuer != null)
+			cb = ''
+		return cb;
 	}
 }
 
